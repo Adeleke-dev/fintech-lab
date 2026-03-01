@@ -14,8 +14,3 @@ Containerized merchant payment service + Playwright API tests.
 docker compose up --build --exit-code-from tests
 
 
-Commit + push:
-```bash
-git add README.md
-git commit -m "Docs: add README + CI badge"
-git push
