@@ -1,4 +1,4 @@
-![CI](https://github.com/Adeleke-dev/fintech-lab/actions/workflows/ci.yml/badge.svg)
+[![CI - Fintech QA (Docker Compose)](https://github.com/Adeleke-dev/fintech-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/Adeleke-dev/fintech-lab/actions/workflows/ci.yml)
 
 ## Fintech QA Automation Lab (Payments)
 Containerized merchant payment service + Playwright API tests.
