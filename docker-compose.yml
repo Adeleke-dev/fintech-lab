@@ -1,0 +1,12 @@
+services:
+  merchant:
+    build: ./merchant-service
+    ports:
+      - "3000:3000"
+
+  tests:
+    build: ./qa-automation
+    environment:
+      - BASE_URL=http://merchant:3000
+    depends_on:
+      - merchant

@@ -1,0 +1,19 @@
+name: CI - Fintech QA (Docker Compose)
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  compose-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build + run tests with Docker Compose
+        run: docker compose up --build --exit-code-from tests
+
+      - name: Tear down
+        if: always()
+        run: docker compose down -v
