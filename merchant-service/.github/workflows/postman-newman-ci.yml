@@ -1,0 +1,62 @@
+name: Postman Newman API Regression
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  newman-api-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install app dependencies
+        run: npm install
+
+      - name: Install Newman and HTML reporter
+        run: npm install -g newman newman-reporter-htmlextra
+
+      - name: Start merchant-service
+        run: |
+          docker compose up -d
+
+      - name: Wait for health endpoint
+        run: |
+          for i in {1..20}; do
+            if curl -f http://localhost:3000/health; then
+              echo "Service is healthy"
+              exit 0
+            fi
+            echo "Waiting for service..."
+            sleep 3
+          done
+          echo "Service did not become healthy in time"
+          docker compose logs
+          exit 1
+
+      - name: Run Newman collection
+        run: |
+          mkdir -p reports
+          newman run postman/merchant-service-regression.postman_collection.json \
+            -e postman/merchant-local.postman_environment.json \
+            -r cli,htmlextra \
+            --reporter-htmlextra-export reports/day2-ci-newman-report.html
+
+      - name: Upload Newman HTML report
+        uses: actions/upload-artifact@v4
+        with:
+          name: newman-html-report
+          path: reports/day2-ci-newman-report.html
+
+      - name: Show container logs on failure
+        if: failure()
+        run: docker compose logs
