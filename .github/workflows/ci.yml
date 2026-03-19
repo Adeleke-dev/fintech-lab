@@ -14,6 +14,37 @@ jobs:
       - name: Build + run tests with Docker Compose
         run: docker compose up --build --exit-code-from tests
 
+      - name: Install Newman
+        run: npm install -g newman newman-reporter-htmlextra
+
+      - name: Run Newman Positive Tests (must pass)
+  run: |
+    mkdir -p merchant-service/reports
+    newman run merchant-service/postman/merchant-service-regression.postman_collection.json \
+      -e merchant-service/postman/merchant-ci.postman_environment.json \
+      -r cli,htmlextra \
+      --reporter-htmlextra-export merchant-service/reports/day6-positive-report.html
+
+    - name: Run Newman Negative Tests (allowed to fail)
+  continue-on-error: true
+  run: |
+    newman run merchant-service/postman/merchant-service-regression.postman_collection.json \
+      -e merchant-service/postman/merchant-ci.postman_environment.json \
+      -d merchant-service/tests/data/payment-intents-invalid.csv \
+      --folder "Negative Tests" \
+      -r cli,htmlextra \
+      --reporter-htmlextra-export merchant-service/reports/day6-negative-report.html
+
+    - name: Run Newman Idempotency Tests (allowed to fail)
+  continue-on-error: true
+  run: |
+    newman run merchant-service/postman/merchant-service-regression.postman_collection.json \
+      -e merchant-service/postman/merchant-ci.postman_environment.json \
+      -d merchant-service/tests/data/payment-intents-duplicate.csv \
+      --folder "POST /payments/intent - idempotency" \
+      -r cli,htmlextra \
+      --reporter-htmlextra-export merchant-service/reports/day6-idempotency-report.html
+
       - name: Tear down
         if: always()
         run: docker compose down -v
