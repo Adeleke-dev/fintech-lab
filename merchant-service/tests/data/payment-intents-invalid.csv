@@ -1,0 +1,5 @@
+amount,currency,email,reference,expected_status,case_name
+0,NGN,bad1@example.com,neg-ref-001,400,zero amount
+-500,NGN,bad2@example.com,neg-ref-002,400,negative amount
+5000,NGN,,neg-ref-003,400,missing email
+5000,NGN,bad4@example.com,,400,missing reference

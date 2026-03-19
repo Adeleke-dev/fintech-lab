@@ -7,6 +7,67 @@
   },
   "item": [
     {
+      "name": "Negative Tests",
+      "item": [
+        {
+          "name": "POST /payments/intent - invalid",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code matches expected negative status\", function () {\r",
+                  "    pm.expect(pm.response.code).to.eql(Number(pm.iterationData.get(\"expected_status\")));\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response is not a success\", function () {\r",
+                  "    pm.expect(pm.response.code).to.not.be.oneOf([200, 201]);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response time is acceptable\", function () {\r",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"amount\": {{amount}},\r\n  \"currency\": \"{{currency}}\",\r\n  \"email\": \"{{email}}\",\r\n  \"reference\": \"{{reference}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/payments/intent",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "payments",
+                "intent"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
       "name": "GET /health",
       "event": [
         {
@@ -78,7 +139,72 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n  \"amount\": 5000,\r\n  \"currency\": \"NGN\",\r\n  \"email\": \"test@example.com\",\r\n  \"reference\": \"pm-intent-001\"\r\n}",
+          "raw": "{\r\n  \"amount\": {{amount}},\r\n  \"currency\": \"{{currency}}\",\r\n  \"email\": \"{{email}}\",\r\n  \"reference\": \"{{reference}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/payments/intent",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "payments",
+            "intent"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST /payments/intent - idempotency",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let responseJson = pm.response.json();\r",
+              "\r",
+              "// Try to get payment id (adjust if your API uses different key)\r",
+              "let paymentId = responseJson.id || responseJson.paymentId || null;\r",
+              "\r",
+              "// Get stored value from previous run\r",
+              "let previousId = pm.environment.get(\"last_payment_id\");\r",
+              "\r",
+              "// If this is the first request, store the id\r",
+              "if (!previousId) {\r",
+              "    pm.environment.set(\"last_payment_id\", paymentId);\r",
+              "    pm.test(\"Stored first payment ID\", function () {\r",
+              "        pm.expect(paymentId).to.not.be.null;\r",
+              "    });\r",
+              "} else {\r",
+              "    // Second request → compare\r",
+              "    pm.test(\"Idempotency check - same ID returned\", function () {\r",
+              "        pm.expect(paymentId).to.eql(previousId);\r",
+              "    });\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"amount\": {{amount}},\r\n  \"currency\": \"{{currency}}\",\r\n  \"email\": \"{{email}}\",\r\n  \"reference\": \"{{reference}}\"\r\n}",
           "options": {
             "raw": {
               "language": "json"

@@ -1,0 +1,5 @@
+amount,currency,email,reference,case_name
+5000,NGN,test1@example.com,dup-ref-001,duplicate test 1
+5000,NGN,test1@example.com,dup-ref-001,duplicate test 1 repeat
+7000,USD,test2@example.com,dup-ref-002,duplicate test 2
+7000,USD,test2@example.com,dup-ref-002,duplicate test 2 repeat

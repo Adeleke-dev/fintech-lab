@@ -1,0 +1,4 @@
+amount,currency,email,reference
+5000,NGN,test1@example.com,ref-001
+1000,USD,test2@example.com,ref-002
+7500,EUR,test3@example.com,ref-003
