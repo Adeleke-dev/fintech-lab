@@ -68,96 +68,101 @@
       ]
     },
     {
-      "name": "GET /health",
-      "event": [
+      "name": "Positive Tests",
+      "item": [
         {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"Status code is 200\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
-              "\r",
-              "pm.test(\"Response time is acceptable\", function () {\r",
-              "    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
-              "});"
-            ],
-            "type": "text/javascript",
-            "packages": {},
-            "requests": {}
-          }
-        }
-      ],
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{base_url}}/health",
-          "host": [
-            "{{base_url}}"
-          ],
-          "path": [
-            "health"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "POST /payments/intent",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"Status code is successful\", function () {\r",
-              "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
-              "});\r",
-              "\r",
-              "pm.test(\"Response is JSON\", function () {\r",
-              "    pm.response.to.have.header(\"Content-Type\");\r",
-              "});\r",
-              "\r",
-              "pm.test(\"Response time is acceptable\", function () {\r",
-              "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
-              "});"
-            ],
-            "type": "text/javascript",
-            "packages": {},
-            "requests": {}
-          }
-        }
-      ],
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json",
-            "type": "text"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n  \"amount\": {{amount}},\r\n  \"currency\": \"{{currency}}\",\r\n  \"email\": \"{{email}}\",\r\n  \"reference\": \"{{reference}}\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
+          "name": "POST /payments/intent",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is successful\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response is JSON\", function () {\r",
+                  "    pm.response.to.have.header(\"Content-Type\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response time is acceptable\", function () {\r",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
             }
-          }
-        },
-        "url": {
-          "raw": "{{base_url}}/payments/intent",
-          "host": [
-            "{{base_url}}"
           ],
-          "path": [
-            "payments",
-            "intent"
-          ]
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"amount\": {{amount}},\r\n  \"currency\": \"{{currency}}\",\r\n  \"email\": \"{{email}}\",\r\n  \"reference\": \"{{reference}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/payments/intent",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "payments",
+                "intent"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /health",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response time is acceptable\", function () {\r",
+                  "    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "health"
+              ]
+            }
+          },
+          "response": []
         }
-      },
-      "response": []
+      ]
     },
     {
       "name": "POST /payments/intent - idempotency",
