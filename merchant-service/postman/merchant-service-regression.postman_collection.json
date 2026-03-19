@@ -106,7 +106,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"amount\": {{amount}},\r\n  \"currency\": \"{{currency}}\",\r\n  \"email\": \"{{email}}\",\r\n  \"reference\": \"{{reference}}\"\r\n}",
+              "raw": "{\r\n  \"amount\": 5000,\r\n  \"currency\": \"NGN\",\r\n  \"email\": \"test@example.com\",\r\n  \"reference\": \"ci-positive-001\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -211,7 +211,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n  \"amount\": 5000,\r\n  \"currency\": \"NGN\",\r\n  \"email\": \"test@example.com\",\r\n  \"reference\": \"ci-positive-001\"\r\n}",
+          "raw": "{\r\n  \"amount\": {{amount}},\r\n  \"currency\": \"{{currency}}\",\r\n  \"email\": \"{{email}}\",\r\n  \"reference\": \"{{reference}}\"\r\n}",
           "options": {
             "raw": {
               "language": "json"
