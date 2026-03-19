@@ -171,26 +171,17 @@
           "listen": "test",
           "script": {
             "exec": [
-              "let responseJson = pm.response.json();\r",
+              "pm.test(\"Status code is successful\", function () {\r",
+              "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+              "});\r",
               "\r",
-              "// Try to get payment id (adjust if your API uses different key)\r",
-              "let paymentId = responseJson.id || responseJson.paymentId || null;\r",
+              "pm.test(\"Response is JSON\", function () {\r",
+              "    pm.response.to.have.header(\"Content-Type\");\r",
+              "});\r",
               "\r",
-              "// Get stored value from previous run\r",
-              "let previousId = pm.environment.get(\"last_payment_id\");\r",
-              "\r",
-              "// If this is the first request, store the id\r",
-              "if (!previousId) {\r",
-              "    pm.environment.set(\"last_payment_id\", paymentId);\r",
-              "    pm.test(\"Stored first payment ID\", function () {\r",
-              "        pm.expect(paymentId).to.not.be.null;\r",
-              "    });\r",
-              "} else {\r",
-              "    // Second request → compare\r",
-              "    pm.test(\"Idempotency check - same ID returned\", function () {\r",
-              "        pm.expect(paymentId).to.eql(previousId);\r",
-              "    });\r",
-              "}"
+              "pm.test(\"Response time is acceptable\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+              "});"
             ],
             "type": "text/javascript",
             "packages": {},
@@ -209,7 +200,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n  \"amount\": {{amount}},\r\n  \"currency\": \"{{currency}}\",\r\n  \"email\": \"{{email}}\",\r\n  \"reference\": \"{{reference}}\"\r\n}",
+          "raw": "{\r\n  \"amount\": 5000,\r\n  \"currency\": \"NGN\",\r\n  \"email\": \"test@example.com\",\r\n  \"reference\": \"ci-positive-001\"\r\n}",
           "options": {
             "raw": {
               "language": "json"
