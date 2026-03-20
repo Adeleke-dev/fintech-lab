@@ -117,8 +117,79 @@ Newman data-driven tests using duplicate datasets
 
 ---
 
-### Run locally
+## ▶️ How to Run Locally
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Adeleke-dev/fintech-lab.git
+cd fintech-lab
+```
+
+### 2. Start the merchant service and Playwright tests with Docker Compose
+
 ```bash
 docker compose up --build --exit-code-from tests
+```
+
+This will:
+
+* build the `merchant` service
+* run the `tests` container
+* return the test exit status
+
+---
+
+### 3. Run Newman positive API tests locally
+
+```bash
+cd merchant-service
+newman run postman/merchant-service-regression.postman_collection.json \
+  -e postman/merchant-local.postman_environment.json \
+  --folder "Positive Tests"
+```
+
+---
+
+### 4. Run data-driven negative tests
+
+```bash
+newman run postman/merchant-service-regression.postman_collection.json \
+  -e postman/merchant-local.postman_environment.json \
+  -d tests/data/payment-intents-invalid.csv \
+  --folder "Negative Tests"
+```
+
+---
+
+### 5. Run idempotency tests
+
+```bash
+newman run postman/merchant-service-regression.postman_collection.json \
+  -e postman/merchant-local.postman_environment.json \
+  -d tests/data/payment-intents-duplicate.csv \
+  --folder "POST /payments/intent - idempotency"
+```
+
+---
+
+## 📁 Key Artifacts
+
+* `merchant-service/reports/day1-newman-report.html`
+* `merchant-service/reports/day3-data-driven-report.html`
+* `merchant-service/reports/day4-negative-validation-report.html`
+* `merchant-service/reports/day5-idempotency-report.html`
+
+---
+
+## 🧠 Notes
+
+* Positive tests are expected to pass
+* Negative and idempotency suites are used to detect known defects
+* CI is configured to allow those defect-detection suites to run without blocking the full pipeline
+
+```
+```
+
 
 
