@@ -1,7 +1,38 @@
-![CI](https://github.com/Adeleke-dev/fintech-lab/actions/workflows/ci.yml/badge.svg)
 
-## Fintech QA Automation Lab (Payments)
+
 # Fintech QA Automation Lab (Payments)
+
+![CI - Fintech QA](https://github.com/Adeleke-dev/fintech-lab/actions/workflows/ci.yml/badge.svg)
+
+## 🧰 Tech Stack
+
+* Node.js
+* Docker Compose
+* Playwright
+* Postman
+* Newman
+* GitHub Actions
+
+---
+
+## 💼 Portfolio Highlights
+
+This project demonstrates:
+
+* containerized service validation
+* API regression automation with Newman
+* data-driven testing using CSV datasets
+* negative testing for validation gaps
+* idempotency testing for duplicate-payment risk
+* CI pipeline design with blocking vs non-blocking suites
+* HTML report generation and artifact upload
+
+---
+
+## 🗣️ Interview Summary
+
+Built a production-style QA automation project for a merchant payment service using Docker Compose, Playwright, Postman, Newman, and GitHub Actions. The project validates happy-path payment flows, uncovers validation defects through negative testing, and identifies idempotency risks that could lead to duplicate charges. CI was designed to separate critical blocking tests from defect-detection suites, while still preserving test evidence through uploaded reports.
+
 
 A production-style QA automation project for a merchant payment service, focused on **API reliability, data integrity, and CI-driven validation**.
 
