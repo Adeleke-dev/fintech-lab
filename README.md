@@ -85,11 +85,13 @@ Invalid inputs to ensure proper validation.
 
 ---
 
-### 3. Idempotency Tests (allowed to fail)
+### 3. Idempotency Tests (non-blocking)
 
 Ensures duplicate requests do not create duplicate payments.
 
-* Same reference → should return same payment ID
+* Same idempotency key → should return same payment ID
+  
+These tests validate duplicate-request protection and help surface payment integrity risks without blocking the full pipeline.
 
 👉 These tests help detect **financial risk bugs**
 
@@ -127,23 +129,25 @@ These reports provide:
 
 ---
 
-## 🚨 Known Issues Detected
+## 🚨 Quality Risks Validated
 
-### Idempotency Failure
+### Idempotency protection
 
 **Expected:**
-Repeated requests with the same reference should return the same payment ID
+Repeated requests with the same idempotency key should return the same payment ID
+
 
 **Actual:**
-Each request returns a different payment ID
+Repeated requests return the same payment object instead of creating duplicates
 
-**Impact:**
+
+**Impact prevented:**
 
 * Duplicate charges
 * Financial inconsistencies
 * Reconciliation issues
 
-**Detected via:**
+**Validated via:**
 Newman data-driven tests using duplicate datasets
 
 ---
@@ -216,8 +220,10 @@ newman run postman/merchant-service-regression.postman_collection.json \
 ## 🧠 Notes
 
 * Positive tests are expected to pass
-* Negative and idempotency suites are used to detect known defects
-* CI is configured to allow those defect-detection suites to run without blocking the full pipeline
+* Negative tests are used to expose validation gaps and edge-case defects
+* Idempotency tests validate duplicate-request protection
+* CI is configured so critical regression checks remain blocking, while exploratory defect-detection suites can still run and publish evidence
+
 
 ```
 ```
